@@ -20,8 +20,11 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
 
-      - name: Export Docker Image
-        run: docker save ghcr.io/mr-pick/obfuscapk:latest -o obfuscapk.tar.gz
+      - name: Pull and Export Docker Image
+        run: |
+          docker pull ghcr.io/mr-pick/obfuscapk:latest
+          docker save ghcr.io/mr-pick/obfuscapk:latest -o obfuscapk.tar.gz
+          ls -lh obfuscapk.tar.gz
 
       - name: Upload to Release
         uses: softprops/action-gh-release@v2
