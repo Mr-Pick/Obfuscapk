@@ -20,17 +20,14 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
 
-      - name: Login to Aliyun Registry
-        uses: docker/login-action@v3
-        with:
-          registry: registry.cn-hangzhou.aliyuncs.com
-          username: ${{ secrets.ALIYUN_USERNAME }}
-          password: ${{ secrets.ALIYUN_PASSWORD }}
+      - name: Export Docker Image
+        run: docker save ghcr.io/mr-pick/obfuscapk:latest -o obfuscapk.tar.gz
 
-      - name: Push to Aliyun
-        run: |
-          docker tag ghcr.io/mr-pick/obfuscapk:latest registry.cn-hangzhou.aliyuncs.com/pick/obfuscapk:latest
-          docker push registry.cn-hangzhou.aliyuncs.com/pick/obfuscapk:latest
+      - name: Upload to Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: docker-v1
+          files: obfuscapk.tar.gz
       - name: Build and Push
         uses: docker/build-push-action@v5
         with:
